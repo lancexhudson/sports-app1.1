@@ -25,21 +25,29 @@ const PollCard = ({ polls }) => {
   }, [votes]);
 
   const handleVote = (pollId, optionId) => {
-    const pollVotes = votes[pollId];
-    if (!pollVotes) return;
+    // Build a safe baseline for this poll's votes in case state hasn't initialized yet
+    const poll = polls.find((p) => p.id === pollId);
+    const baseline = votes[pollId]
+      || (poll
+        ? poll.options.reduce((acc, opt) => ({ ...acc, [opt.id]: 0 }), {})
+        : {});
 
-    // Check if user has already voted
-    const hasVoted = Object.values(pollVotes).some((count) => count > 0);
+    // Prevent duplicate voting
+    const hasVoted = Object.values(baseline).some((count) => count > 0);
     if (hasVoted) return;
 
     // Record vote
-    setVotes((prev) => ({
-      ...prev,
-      [pollId]: {
-        ...prev[pollId],
-        [optionId]: prev[pollId][optionId] + 1,
-      },
-    }));
+    setVotes((prev) => {
+      const prevBaseline = prev[pollId]
+        || (poll
+          ? poll.options.reduce((acc, opt) => ({ ...acc, [opt.id]: 0 }), {})
+          : {});
+      const updated = {
+        ...prevBaseline,
+        [optionId]: (prevBaseline[optionId] || 0) + 1,
+      };
+      return { ...prev, [pollId]: updated };
+    });
 
     // Show thank you popup
     setShowThanks(pollId);
