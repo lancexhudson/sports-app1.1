@@ -9,10 +9,10 @@ import {
 } from 'react-icons/fa';
 
 const sports = [
-  { id: 'baseball', icon: FaBaseballBall, label: 'Baseball' },
-  { id: 'basketball', icon: FaBasketballBall, label: 'Basketball' },
   { id: 'football', icon: FaFootballBall, label: 'Football' },
   { id: 'soccer', icon: FaFutbol, label: 'Soccer' },
+  { id: 'baseball', icon: FaBaseballBall, label: 'Baseball' },
+  { id: 'basketball', icon: FaBasketballBall, label: 'Basketball' },
   { id: 'golf', icon: FaGolfBall, label: 'Golf' },
 ];
 

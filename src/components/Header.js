@@ -1,54 +1,70 @@
 // src/components/Header.js
+import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import StadiumIcon from './StadiumIcon';
-
-import {
-  // eslint-disable-next-line
-  FiHome,
-  FiRss,
-  FiTrendingUp,
-  FiTwitter,
-  FiBarChart2,
-} from 'react-icons/fi';
-import './Header.css'; // We'll create this next
-
-const tabs = [
-  { id: 'featured', label: 'Featured', icon: FiRss },
-  { id: 'scores', label: 'Scores', icon: FiTrendingUp },
-  { id: 'social', label: 'Social', icon: FiTwitter },
-  { id: 'polls', label: 'Polls', icon: FiBarChart2 },
-];
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
-  const { sportId = 'baseball' } = useParams(); // Default to baseball
+  const { sportId = 'baseball' } = useParams();
   const isHome = !sportId || sportId === '/';
 
   return (
     <header className="app-header">
       <div className="header-container">
-        {/* Logo / Home */}
+        {/* Logo with Trophy Icon */}
         <NavLink to="/" className="header-logo">
-          <i className="fa-solid fa-stadium" aria-hidden="true"></i>{' '}
-          <StadiumIcon size={24} />
+          <FontAwesomeIcon icon={faTrophy} className="header-icon" />
           <span>OVERTIME</span>
         </NavLink>
 
-        {/* Tab Icons – Only show on sport pages */}
+        {/* Text Links – Only on sport pages */}
         {!isHome && (
-          <nav className="header-tabs">
-            {tabs.map(({ id, label, icon: Icon }) => (
-              <NavLink
-                key={id}
-                to={`/${sportId}/${id}`}
-                className={({ isActive }) =>
-                  `header-tab ${isActive ? 'active' : ''}`
-                }
-                title={label}
-                end
-              >
-                <Icon size={20} />
-              </NavLink>
-            ))}
+          <nav className="header-nav">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `header-link ${isActive ? 'active' : ''}`
+              }
+              end
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to={`/${sportId}/scores`}
+              className={({ isActive }) =>
+                `header-link ${isActive ? 'active' : ''}`
+              }
+              end
+            >
+              Scores
+            </NavLink>
+            <NavLink
+              to={`/${sportId}/social`}
+              className={({ isActive }) =>
+                `header-link ${isActive ? 'active' : ''}`
+              }
+              end
+            >
+              Social
+            </NavLink>
+            <NavLink
+              to={`/${sportId}/polls`}
+              className={({ isActive }) =>
+                `header-link ${isActive ? 'active' : ''}`
+              }
+              end
+            >
+              Polls
+            </NavLink>
+            <NavLink
+              to={`/${sportId}/standings`}
+              className={({ isActive }) =>
+                `header-link ${isActive ? 'active' : ''}`
+              }
+              end
+            >
+              Standings
+            </NavLink>
           </nav>
         )}
       </div>
