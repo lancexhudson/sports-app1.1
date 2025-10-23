@@ -33,15 +33,15 @@ const POLLS = [
       { id: 'c', text: 'Jokić & Murray' },
     ],
   },
-  {
-    id: '3',
-    question: 'Next Super Bowl champ?',
-    options: [
-      { id: 'a', text: 'Chiefs' },
-      { id: 'b', text: '49ers' },
-      { id: 'c', text: 'Bengals' },
-    ],
-  },
+  //   {
+  //     id: '3',
+  //     question: 'Next Super Bowl champ?',
+  //     options: [
+  //       { id: 'a', text: 'Chiefs' },
+  //       { id: 'b', text: '49ers' },
+  //       { id: 'c', text: 'Bengals' },
+  //     ],
+  //   },
 ];
 
 export default function HomePage() {

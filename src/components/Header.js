@@ -11,13 +11,10 @@ export default function Header() {
   return (
     <header className="app-header">
       <div className="header-container">
-        {/* Logo with Trophy Icon */}
         <NavLink to="/" className="header-logo">
           <FontAwesomeIcon icon={faTrophy} className="header-icon" />
           <span>OVERTIME</span>
         </NavLink>
-
-        {/* Text Links – Only on sport pages */}
         {!isHome && (
           <nav className="header-nav">
             <NavLink

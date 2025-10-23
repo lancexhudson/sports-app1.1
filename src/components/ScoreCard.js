@@ -1,4 +1,3 @@
-// src/components/ScoreCard.js
 export default function ScoreCard({
   home,
   away,

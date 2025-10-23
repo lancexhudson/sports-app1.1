@@ -441,6 +441,7 @@ body,
 }
 
 /* === UNIFIED POLL CARD === */
+/* === UNIFIED POLL CARD === */
 .poll-card {
   background: #1e1e1e;
   border-radius: 12px;
@@ -560,6 +561,53 @@ body,
   color: #aaa;
   text-align: right;
   margin-top: 8px;
+}
+
+/* === THANK YOU POPUP === */
+.thank-you-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ff6b35;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+  z-index: 10;
+  animation: popupFade 2s forwards;
+  pointer-events: none;
+}
+
+@keyframes popupFade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  85% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+}
+
+/* Ensure no overlap with header */
+@media (max-width: 992px) {
+  .poll-card {
+    padding: 14px;
+  }
+  .poll-question {
+    font-size: 14px;
+  }
 }
 
 /* === THANK YOU POPUP === */
