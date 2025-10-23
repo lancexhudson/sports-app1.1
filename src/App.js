@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
+import SubHeader from './components/SubHeader';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SportPage from './pages/SportPage';
@@ -13,6 +14,7 @@ export default function App() {
     <Router>
       <div className="app-wrapper">
         <Header />
+        <SubHeader />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />

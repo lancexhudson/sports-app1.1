@@ -258,6 +258,53 @@ body,
   flex: 1;
 }
 
+/* === SUBHEADER === */
+.sticky-subheader {
+  position: sticky;
+  top: 60px; /* header height */
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #333;
+  z-index: 900;
+}
+
+.subheader-scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.subheader-nav {
+  display: flex;
+  gap: 16px;
+  padding: 8px 16px;
+}
+
+.subheader-link {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 0;
+  white-space: nowrap;
+  position: relative;
+}
+
+.subheader-link:hover {
+  color: #ff6b35;
+}
+
+.subheader-link.active {
+  color: #ff6b35;
+}
+
+.subheader-link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: #ff6b35;
+}
+
 /* === HOME PAGE: 2x3 GRID + UPCOMING GAMES === */
 .home-grid {
   display: grid;

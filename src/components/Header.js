@@ -1,12 +1,17 @@
 // src/components/Header.js
 import React from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
-  const { sportId = 'baseball' } = useParams();
-  const isHome = !sportId || sportId === '/';
+  const location = useLocation();
+  const pathname = location.pathname || '/';
+  const segments = pathname.split('/').filter(Boolean);
+  const currentSportId = segments[0];
+  const isSportPage = !!currentSportId && currentSportId !== 'standings';
+  const sportId = isSportPage ? currentSportId : 'baseball';
+  const isHome = pathname === '/';
 
   return (
     <header className="app-header">
@@ -18,7 +23,7 @@ export default function Header() {
         </NavLink>
 
         {/* Text Links – Only on sport pages */}
-        {!isHome && (
+        {isSportPage && (
           <nav className="header-nav">
             <NavLink
               to="/"
@@ -57,7 +62,7 @@ export default function Header() {
               Polls
             </NavLink>
             <NavLink
-              to={`/${sportId}/standings`}
+              to={`/standings`}
               className={({ isActive }) =>
                 `header-link ${isActive ? 'active' : ''}`
               }

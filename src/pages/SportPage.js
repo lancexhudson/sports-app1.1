@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import NewsCard from '../components/NewsCard';
 import ScoreCard from '../components/ScoreCard';
+import TweetCard from '../components/TweetCard';
+import PollCard from '../components/PollCard';
 
 const SPORTS = {
   baseball: 'mlb',
@@ -19,6 +21,8 @@ export default function SportPage() {
   const league = SPORTS[sport] || 'mlb';
   const [stories, setStories] = useState([]);
   const [scores, setScores] = useState([]);
+  const [tweets, setTweets] = useState([]);
+  const [polls, setPolls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -103,6 +107,22 @@ export default function SportPage() {
             setScores([]);
           }
         }
+
+        // === SOCIAL TAB ===
+        if (tab === 'social') {
+          try {
+            // Fallback to mock tweets for simplicity / no token
+            setTweets(mockTweets(sport));
+          } catch (err) {
+            console.warn(`Social failed for ${sport}:`, err);
+            setTweets([]);
+          }
+        }
+
+        // === POLLS TAB ===
+        if (tab === 'polls') {
+          setPolls(getPollsForSport(sport));
+        }
       } catch (err) {
         console.error('Sport page API error:', err);
         setError('Failed to load data.');
@@ -113,6 +133,46 @@ export default function SportPage() {
 
     fetchSportData();
   }, [sport, league, tab]);
+
+  const getPollsForSport = (sportKey) => {
+    const readable = sportKey.charAt(0).toUpperCase() + sportKey.slice(1);
+    return [
+      {
+        id: `${sportKey}-1`,
+        question: `Who wins the ${readable} championship?`,
+        options: [
+          { id: 'a', text: 'Favorite' },
+          { id: 'b', text: 'Dark Horse' },
+          { id: 'c', text: 'Long Shot' },
+        ],
+      },
+      {
+        id: `${sportKey}-2`,
+        question: `MVP so far in ${readable}?`,
+        options: [
+          { id: 'a', text: 'Player A' },
+          { id: 'b', text: 'Player B' },
+          { id: 'c', text: 'Player C' },
+        ],
+      },
+    ];
+  };
+
+  const mockTweets = (sportKey) => {
+    const tag = sportKey.toUpperCase();
+    return [
+      { id: '1', text: `${tag} fans are hyped for the playoffs! #${tag}`, author: 'Fan1', likes: 150, retweets: 25 },
+      { id: '2', text: `Just watched the latest ${sportKey} game – insane finish!`, author: 'Fan2', likes: 120, retweets: 20 },
+      { id: '3', text: `Prediction: ${sportKey} team X wins it all.`, author: 'Expert3', likes: 95, retweets: 15 },
+      { id: '4', text: `Highlight of the week in ${sportKey}!`, author: 'Highlight4', likes: 80, retweets: 12 },
+      { id: '5', text: `Underrated player in ${sportKey} right now.`, author: 'Underrated5', likes: 70, retweets: 10 },
+      { id: '6', text: `Memes from the ${sportKey} game are gold 😂`, author: 'Meme6', likes: 65, retweets: 9 },
+      { id: '7', text: `Trade rumors heating up in ${sportKey}.`, author: 'Rumors7', likes: 60, retweets: 8 },
+      { id: '8', text: `Best moment from ${sportKey} this season.`, author: 'Moment8', likes: 55, retweets: 7 },
+      { id: '9', text: `Shoutout to the ${sportKey} rookies!`, author: 'Rookie9', likes: 50, retweets: 6 },
+      { id: '10', text: `What's your hot take on ${sportKey}?`, author: 'HotTake10', likes: 45, retweets: 5 },
+    ];
+  };
 
   return (
     <div
@@ -157,6 +217,34 @@ export default function SportPage() {
                   No scores available.
                 </p>
               )}
+            </section>
+          )}
+
+          {tab === 'social' && (
+            <section style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {tweets.length > 0 ? (
+                tweets.map((tweet) => (
+                  <TweetCard
+                    key={tweet.id}
+                    text={tweet.text}
+                    author={tweet.author}
+                    likes={tweet.likes}
+                    retweets={tweet.retweets}
+                  />
+                ))
+              ) : (
+                <p style={{ textAlign: 'center', color: '#aaa' }}>
+                  No tweets available.
+                </p>
+              )}
+            </section>
+          )}
+
+          {tab === 'polls' && (
+            <section className="home-sidebar">
+              <div className="sidebar-section">
+                <PollCard polls={polls} />
+              </div>
             </section>
           )}
         </div>
