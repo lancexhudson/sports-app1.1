@@ -1,4 +1,5 @@
-src/index.css * {
+/* src/index.css */
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -18,21 +19,20 @@ body {
   padding: 0 16px;
 }
 
-/* Sticky Elements */
-.sticky-header,
-.sticky-footer {
-  position: sticky;
-  background-color: #1e1e1e;
-  border: 1px solid #333;
-  z-index: 100;
+/* === LAYOUT === */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
 }
-
-.sticky-header {
-  top: 0;
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-
-.sticky-footer {
-  bottom: 0;
+.main-content {
+  flex: 1;
 }
 
 /* === HEADER === */
@@ -89,11 +89,9 @@ body {
 .header-link:hover {
   color: #ff6b35;
 }
-
 .header-link.active {
   color: #ff6b35;
 }
-
 .header-link.active::after {
   content: '';
   position: absolute;
@@ -104,33 +102,7 @@ body {
   background: #ff6b35;
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
-  .header-container {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .header-nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .header-link {
-    font-size: 14px;
-  }
-
-  .header-logo {
-    font-size: 20px;
-  }
-
-  .header-icon {
-    font-size: 20px;
-  }
-}
-
-/* Footer */
+/* === FOOTER === */
 .footer-nav {
   display: flex;
   justify-content: space-around;
@@ -147,118 +119,13 @@ body {
 .footer-link.active {
   color: #ff6b35;
 }
-
 .footer-icon {
   font-size: 24px;
   display: block;
   margin-bottom: 4px;
 }
 
-/* Cards */
-.card-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-
-.card {
-  background-color: #1e1e1e;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.card img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-}
-
-.card-content {
-  padding: 16px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #fff;
-}
-
-.card-desc {
-  font-size: 14px;
-  color: #aaa;
-  line-height: 1.5;
-}
-
-.score-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-}
-
-.score-team {
-  text-align: center;
-}
-
-.score-team-name {
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.score-team-points {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ff6b35;
-}
-
-.score-status {
-  font-size: 12px;
-  color: #aaa;
-}
-
-.tweet-card {
-  padding: 16px;
-  border-left: 4px solid #1da1f2;
-}
-
-.tweet-author {
-  font-size: 12px;
-  color: #1da1f2;
-  margin-bottom: 4px;
-}
-
-.tweet-text {
-  font-size: 15px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Add to bottom of src/index.css */
-html,
-body,
-#root {
-  height: 100%;
-  margin: 0;
-}
-
-.app-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.main-content {
-  flex: 1;
-}
-
-/* === HOME PAGE: 2x3 GRID + UPCOMING GAMES === */
+/* === HOME PAGE GRID === */
 .home-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -266,42 +133,15 @@ body,
   align-items: start;
 }
 
-/* === 2x3 STORIES GRID – 2 COLUMNS, 3 ROWS === */
+/* === STORIES GRID (2x3) === */
 .stories-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 columns */
-  grid-template-rows: 1fr 1fr 1fr 1fr; /* 3 rows */
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
   gap: 16px;
-  min-height: 0;
 }
 
-/* === 4x3 STORIES GRID – 4 COLUMNS, 3 ROWS === */
-.sport-stories-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* 2 columns */
-  grid-template-rows: 1fr 1fr 1fr; /* 3 rows */
-  gap: 16px;
-  min-height: 0;
-}
-
-@media (max-width: 992px) {
-  .stories-grid {
-    grid-template-columns: 1fr; /* 1 column */
-    grid-template-rows: auto; /* Auto rows */
-  }
-}
-
-/* === UPCOMING GAMES – Scrollable, Bounded === */
-.games-scroll {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 100%;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-/* === STRICT NEWS CARD SIZING === */
+/* === NEWS CARD === */
 .news-card-fixed {
   background: #1e1e1e;
   border-radius: 12px;
@@ -322,12 +162,10 @@ body,
   overflow: hidden;
   flex-shrink: 0;
 }
-
 .news-card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .news-card-content {
@@ -361,93 +199,182 @@ body,
   overflow: hidden;
 }
 
-/* === UPCOMING GAMES – Scrollable, Bounded === */
-.games-scroll {
+/* ========================================= */
+/* === SCORECARD – ORIGINAL HOME STYLE === */
+/* ========================================= */
+.score-card {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 14px 16px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 100%;
-  overflow-y: auto;
-  padding-right: 4px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  min-height: 68px;
 }
 
-.games-scroll::-webkit-scrollbar {
-  width: 6px;
+.score-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 107, 53, 0.15);
 }
-.games-scroll::-webkit-scrollbar-track {
+
+/* Team Names */
+.score-team-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #e0e0e0;
+}
+
+/* Score */
+.score-team-points {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ff6b35;
+  margin: 2px 0;
+}
+
+/* Right Side: Status + Kickoff */
+.score-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 80px;
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.3;
+}
+
+.score-status {
+  font-weight: 500;
+}
+
+.score-kickoff {
+  font-style: italic;
+  margin-top: 1px;
+}
+
+/* FINAL Badge */
+.final-badge {
+  background: #ff6b35;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  margin-left: 6px;
+  box-shadow: 0 1px 2px rgba(255, 107, 53, 0.3);
+}
+
+/* ========================================= */
+/* === GAMES & SCORES LIST (HOME + SCORES) === */
+/* ========================================= */
+.games-scroll,
+.scores-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Scrollbar */
+.games-scroll::-webkit-scrollbar,
+.scores-list::-webkit-scrollbar {
+  width: 5px;
+}
+.games-scroll::-webkit-scrollbar-track,
+.scores-list::-webkit-scrollbar-track {
   background: transparent;
 }
-.games-scroll::-webkit-scrollbar-thumb {
+.games-scroll::-webkit-scrollbar-thumb,
+.scores-list::-webkit-scrollbar-thumb {
   background: #444;
   border-radius: 3px;
 }
 
-/* === RESPONSIVE: Stack on Mobile === */
-@media (max-width: 992px) {
-  .home-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stories-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-
-  .news-card-fixed {
-    height: auto;
-  }
-
-  .games-scroll {
-    max-height: none;
-    overflow-y: visible;
-  }
+/* === SCORES PAGE === */
+.page-title {
+  font-size: 32px;
+  color: #fff;
+  text-align: center;
+  margin: 24px 0 20px;
+  font-weight: 600;
 }
 
-/* === SEAMLESS STYLING === */
-.home-games,
-.home-stories {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
 }
 
-/* UPCOMING GAMES – Kickoff Time */
-.score-kickoff {
-  font-size: 11px;
+.sport-select {
+  background: #333;
+  color: #e0e0e0;
+  border: 1px solid #ff6b35;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sport-select:hover {
+  background: #444;
+}
+
+.loading,
+.error {
+  text-align: center;
   color: #aaa;
-  margin-top: 2px;
-  font-style: italic;
+  padding: 20px;
+  font-size: 15px;
 }
 
-/* Ensure score-card fits time */
-.score-status {
-  font-size: 12px;
-  color: #aaa;
-  text-align: right;
-  flex-shrink: 0;
-  min-width: 60px;
-}
-
-/* === RIGHT SIDEBAR: GAMES + POLLS === */
-.home-sidebar {
+/* === SOCIAL PAGE === */
+.social-list {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 16px;
 }
 
-.sidebar-section {
-  background: transparent;
+.tweet-card {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #333;
+  color: #e0e0e0;
 }
 
-/* === UNIFIED POLL CARD === */
-/* === UNIFIED POLL CARD === */
+.tweet-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.tweet-date {
+  color: #aaa;
+}
+.tweet-text {
+  margin: 0 0 8px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+.tweet-metrics {
+  color: #ff6b35;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* === POLL CARD === */
 .poll-card {
   background: #1e1e1e;
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  position: relative;
 }
 
 .poll-title {
@@ -463,19 +390,12 @@ body,
   flex-direction: column;
   gap: 20px;
 }
-
-.poll-item {
-  position: relative;
-}
-
 .poll-question {
   font-size: 15px;
   font-weight: 600;
   color: #fff;
   margin: 0 0 10px 0;
-  line-height: 1.4;
 }
-
 .poll-options {
   display: flex;
   flex-direction: column;
@@ -485,9 +405,9 @@ body,
 .poll-option {
   padding: 10px;
   border-radius: 8px;
+  border: 1px solid transparent;
   transition: all 0.2s;
   user-select: none;
-  border: 1px solid transparent;
 }
 
 .poll-option:hover:not(.voted) {
@@ -600,63 +520,6 @@ body,
   }
 }
 
-/* Ensure no overlap with header */
-@media (max-width: 992px) {
-  .poll-card {
-    padding: 14px;
-  }
-  .poll-question {
-    font-size: 14px;
-  }
-}
-
-/* === THANK YOU POPUP === */
-.thank-you-popup {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #ff6b35;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
-  z-index: 10;
-  animation: popupFade 2s forwards;
-  pointer-events: none;
-}
-
-@keyframes popupFade {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -60%);
-  }
-  15% {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-  85% {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -40%);
-  }
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 992px) {
-  .poll-card {
-    padding: 14px;
-  }
-  .poll-question {
-    font-size: 14px;
-  }
-}
-
 /* === STANDINGS PAGE === */
 .standings-grid {
   display: grid;
@@ -667,9 +530,30 @@ body,
 .standings-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.standings-list .score-card {
-  margin-bottom: 0;
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+  .home-grid,
+  .stories-grid {
+    grid-template-columns: 1fr;
+  }
+  .news-card-fixed {
+    height: auto;
+  }
+  .games-scroll,
+  .scores-list {
+    max-height: none;
+    overflow-y: visible;
+  }
+  .score-card {
+    padding: 12px;
+  }
+  .score-team-name {
+    font-size: 14px;
+  }
+  .score-team-points {
+    font-size: 20px;
+  }
 }

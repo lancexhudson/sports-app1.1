@@ -5,8 +5,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SportPage from './pages/SportPage';
-import './index.css';
+import ScoresPage from './pages/ScoresPage';
+import SocialPage from './pages/SocialPage';
 import StandingsPage from './pages/StandingsPage';
+import PollsPage from './pages/PollsPage';
+import './index.css';
 
 export default function App() {
   return (
@@ -16,9 +19,12 @@ export default function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/scores" element={<ScoresPage />} />
+            <Route path="/social" element={<SocialPage />} />
+            <Route path="/standings" element={<StandingsPage />} />
+            <Route path="/polls" element={<PollsPage />} />
             <Route path="/:sportId" element={<SportPage />} />
             <Route path="/:sportId/:tab" element={<SportPage />} />
-            <Route path="/standings" element={<StandingsPage />} />
           </Routes>
         </main>
         <Footer />

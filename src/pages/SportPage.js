@@ -1,166 +1,131 @@
-// src/pages/SportPage.js
+// src/pages/ScoresPage.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import NewsCard from '../components/NewsCard';
 import ScoreCard from '../components/ScoreCard';
 
-const SPORTS = {
-  baseball: 'mlb',
-  basketball: 'nba',
-  football: 'nfl',
-  soccer: 'eng.1',
-  golf: 'pga',
-};
+const SPORT_OPTIONS = [
+  { id: 'all', name: 'All Sports' },
+  { id: 'baseball', name: 'Baseball' },
+  { id: 'football', name: 'Football' },
+  { id: 'basketball', name: 'Basketball' },
+  { id: 'soccer', name: 'Soccer' },
+  { id: 'golf', name: 'Golf' },
+];
 
-export default function SportPage() {
-  const { sportId, tab } = useParams();
-  const sport = sportId || 'baseball';
-  const league = SPORTS[sport] || 'mlb';
-  const [stories, setStories] = useState([]);
+export default function ScoresPage() {
   const [scores, setScores] = useState([]);
+  const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  // ----- ESPN scoreboard endpoint (works for most sports) -----
+  const fetchScores = async () => {
+    setLoading(true);
+    try {
+      const leagues = ['mlb', 'nfl', 'nba', 'eng.1', 'pga'];
+      const all = await Promise.all(
+        leagues.map((l) =>
+          axios.get(
+            `https://site.api.espn.com/apis/site/v2/sports/${l}/scoreboard`
+          )
+        )
+      );
+
+      const flat = all
+        .flatMap((res) => res.data.events || [])
+        .map((e) => ({
+          id: e.id,
+          home:
+            e.competitions[0].competitors.find((c) => c.homeAway === 'home')
+              ?.team?.abbreviation || '',
+          away:
+            e.competitions[0].competitors.find((c) => c.homeAway === 'away')
+              ?.team?.abbreviation || '',
+          homeScore:
+            e.competitions[0].competitors.find((c) => c.homeAway === 'home')
+              ?.score || '',
+          awayScore:
+            e.competitions[0].competitors.find((c) => c.homeAway === 'away')
+              ?.score || '',
+          status: e.status.type.shortDetail || 'Final',
+          sport: e.leagues[0].slug?.split('.')[0] || 'unknown',
+        }))
+        .sort((a, b) => new Date(b.id) - new Date(a.id)) // newest first
+        .slice(0, 50); // safety buffer
+
+      setScores(flat);
+    } catch (e) {
+      console.warn('Scores API error – using mock data', e);
+      setScores(mockScores);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSportData = async () => {
-      setLoading(true);
-      setError(null);
+    fetchScores();
+  }, []);
 
-      try {
-        // === FEATURED TAB – 12 stories (4×3 grid) ===
-        if (tab === 'featured' || !tab) {
-          try {
-            const { data } = await axios.get(
-              `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/news`
-            );
-            const articles = (data.articles || []).slice(0, 12).map((a) => ({
-              title: a.headlines?.[0]?.description || a.title || 'No title',
-              description: a.description || 'No description',
-              image:
-                a.images?.[0]?.url ||
-                'https://via.placeholder.com/300x160?text=News',
-              url: a.links?.web?.href || '#',
-            }));
-            setStories(articles);
-          } catch (err) {
-            console.warn(`News failed for ${sport}:`, err);
-            setStories([]);
-          }
-        }
-
-        // === SCORES TAB ===
-        if (tab === 'scores') {
-          try {
-            const { data } = await axios.get(
-              `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/scoreboard`
-            );
-            const events = (data.events || [])
-              .slice(0, 10)
-              .map((e) => {
-                const comp = e.competitions?.[0];
-                if (!comp) return null;
-
-                const kickoff = new Date(e.date).toLocaleString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: '2-digit',
-                  hour12: true,
-                  timeZone: 'America/New_York',
-                });
-
-                if (sport === 'golf') {
-                  const leader = comp.competitors?.[0]?.athlete || {};
-                  const second = comp.competitors?.[1]?.athlete || {};
-                  return {
-                    home: leader.displayName || 'Leader',
-                    away: second.displayName || 'Runner-Up',
-                    homeScore: leader.score || 'TBD',
-                    awayScore: second.score || 'TBD',
-                    status: e.status?.type?.shortDetail || 'Round 1',
-                    kickoffTime: kickoff,
-                  };
-                }
-
-                const home =
-                  comp.competitors?.find((c) => c.homeAway === 'home') || {};
-                const away =
-                  comp.competitors?.find((c) => c.homeAway === 'away') || {};
-                return {
-                  home: home.team?.abbreviation || 'HOME',
-                  away: away.team?.abbreviation || 'AWAY',
-                  homeScore: home.score || '0',
-                  awayScore: away.score || '0',
-                  status: e.status?.type?.shortDetail || 'Upcoming',
-                  kickoffTime: kickoff,
-                };
-              })
-              .filter(Boolean);
-            setScores(events);
-          } catch (err) {
-            console.warn(`Scores failed for ${sport}:`, err);
-            setScores([]);
-          }
-        }
-      } catch (err) {
-        console.error('Sport page API error:', err);
-        setError('Failed to load data.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSportData();
-  }, [sport, league, tab]);
+  const filtered =
+    filter === 'all' ? scores : scores.filter((s) => s.sport === filter);
 
   return (
-    <div
-      className="container"
-      style={{ padding: '100px 20px 40px', minHeight: 'calc(100vh - 180px)' }}
-    >
-      <h1
-        style={{
-          fontSize: '32px',
-          textAlign: 'center',
-          marginBottom: '32px',
-          color: '#ff6b35',
-        }}
-      >
-        {sport.toUpperCase()} — {tab || 'Featured'}
-      </h1>
+    <div className="container" style={{ paddingTop: '100px' }}>
+      <h1 className="page-title">Scores</h1>
+
+      {/* Sport filter */}
+      <div className="filter-bar">
+        <label
+          htmlFor="sport-select"
+          style={{ marginRight: '8px', color: '#e0e0e0' }}
+        >
+          Filter by sport:
+        </label>
+        <select
+          id="sport-select"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="sport-select"
+        >
+          {SPORT_OPTIONS.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {loading ? (
-        <p style={{ textAlign: 'center', color: '#aaa' }}>Loading...</p>
-      ) : error ? (
-        <p style={{ textAlign: 'center', color: '#ff6b35' }}>{error}</p>
+        <p className="loading">Loading scores…</p>
       ) : (
-        <div>
-          {(tab === 'featured' || !tab) && (
-            <section className="sport-stories-grid">
-              {stories.length > 0 ? (
-                stories.map((story, i) => <NewsCard key={i} {...story} />)
-              ) : (
-                <p style={{ textAlign: 'center', color: '#aaa' }}>
-                  No stories available.
-                </p>
-              )}
-            </section>
-          )}
-
-          {tab === 'scores' && (
-            <section className="games-scroll">
-              {scores.length > 0 ? (
-                scores.map((game, i) => <ScoreCard key={i} {...game} />)
-              ) : (
-                <p style={{ textAlign: 'center', color: '#aaa' }}>
-                  No scores available.
-                </p>
-              )}
-            </section>
-          )}
+        <div className="scores-list">
+          {filtered.slice(0, 10).map((s) => (
+            <ScoreCard key={s.id} {...s} />
+          ))}
         </div>
       )}
     </div>
   );
 }
+
+/* ---- Mock fallback (same shape as API) ---- */
+const mockScores = [
+  {
+    id: 'm1',
+    home: 'NYY',
+    away: 'LAD',
+    homeScore: '5',
+    awayScore: '3',
+    status: 'Final',
+    sport: 'baseball',
+  },
+  {
+    id: 'm2',
+    home: 'KC',
+    away: 'BUF',
+    homeScore: '27',
+    awayScore: '24',
+    status: 'Final',
+    sport: 'football',
+  },
+  // …add a few more if you like
+];

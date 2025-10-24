@@ -1,25 +1,32 @@
+// src/components/ScoreCard.js
 export default function ScoreCard({
   home,
   away,
   homeScore,
   awayScore,
   status,
-  kickoffTime = '',
+  kickoffTime,
 }) {
+  const isFinal = status === 'Final';
+
   return (
-    <div className="card score-card">
-      <div className="score-team">
+    <div className="score-card">
+      {/* Left: Home Team */}
+      <div>
         <div className="score-team-name">{home}</div>
         <div className="score-team-points">{homeScore}</div>
       </div>
-      <span>vs</span>
-      <div className="score-team">
+
+      {/* Right: Away Team */}
+      <div>
         <div className="score-team-name">{away}</div>
         <div className="score-team-points">{awayScore}</div>
       </div>
-      <div className="score-status">
-        <div>{status}</div>
+
+      {/* Right Side: Only kickoff time */}
+      <div className="score-right">
         {kickoffTime && <div className="score-kickoff">{kickoffTime}</div>}
+        {isFinal && <span className="final-badge">FINAL</span>}
       </div>
     </div>
   );
