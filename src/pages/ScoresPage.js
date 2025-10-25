@@ -42,12 +42,8 @@ export default function ScoresPage() {
             if (events.length === 0) return [];
 
             return events
-              .filter((e) => {
-                // Only include FINAL games
-                const status = e.status?.type?.name;
-                return status === 'STATUS_FINAL';
-              })
-              .slice(0, 5) // Up to 5 final games per sport
+              .filter((e) => e.status?.type?.name === 'STATUS_FINAL') // Only FINAL games
+              .slice(0, 5)
               .map((e) => {
                 const comp = e.competitions?.[0];
                 if (!comp) return null;
@@ -66,7 +62,7 @@ export default function ScoresPage() {
                   const winner = comp.competitors?.[0]?.athlete || {};
                   const runnerUp = comp.competitors?.[1]?.athlete || {};
                   return {
-                    id: e.id,
+                    id: e.id, // ← ESPN game ID for details
                     home: winner.displayName || 'Champion',
                     away: runnerUp.displayName || '2nd',
                     homeScore: winner.score || '—',
@@ -77,14 +73,14 @@ export default function ScoresPage() {
                   };
                 }
 
-                // === TEAM SPORTS: Final score ===
+                // === TEAM SPORTS ===
                 const homeTeam =
                   comp.competitors?.find((c) => c.homeAway === 'home') || {};
                 const awayTeam =
                   comp.competitors?.find((c) => c.homeAway === 'away') || {};
 
                 return {
-                  id: e.id,
+                  id: e.id, // ← ESPN game ID for details
                   home: homeTeam.team?.abbreviation || 'HOME',
                   away: awayTeam.team?.abbreviation || 'AWAY',
                   homeScore: homeTeam.score || '0',
@@ -104,7 +100,7 @@ export default function ScoresPage() {
         const results = await Promise.all(scorePromises);
         const allFinal = results.flat();
 
-        // Sort by most recent completed game
+        // Sort by most recent
         allFinal.sort(
           (a, b) => new Date(b.kickoffTime) - new Date(a.kickoffTime)
         );
@@ -167,6 +163,7 @@ export default function ScoresPage() {
           {filtered.slice(0, 10).map((s) => (
             <ScoreCard
               key={s.id}
+              id={s.id} // ← Pass game ID for details link
               home={s.home}
               away={s.away}
               homeScore={s.homeScore}

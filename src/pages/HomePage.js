@@ -180,6 +180,7 @@ export default function HomePage() {
       >
         OVERTIME — Home
       </h1> */}
+      <h1 className="page-title">Home - Featured</h1>
 
       {loading ? (
         <p style={{ textAlign: 'center', color: '#aaa' }}>Loading...</p>
@@ -190,7 +191,11 @@ export default function HomePage() {
           {/* LEFT: 2×3 Top Stories */}
           <section className="home-stories">
             <h2
-              style={{ fontSize: '24px', marginBottom: '16px', color: '#fff' }}
+              style={{
+                fontSize: '24px',
+                marginBottom: '16px',
+                color: '#fff',
+              }}
             >
               Top Stories
             </h2>
