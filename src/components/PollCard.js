@@ -2,155 +2,108 @@
 import React, { useState, useEffect } from 'react';
 
 const PollCard = ({ polls = [] }) => {
-  const [votes, setVotes] = useState({}); // { pollId: { optionId: count } }
-  const [showThanks, setShowThanks] = useState(null); // pollId for thank you popup
+  const [votes, setVotes] = useState({});
+  const [showThanks, setShowThanks] = useState(null); // ← Tracks which poll shows popup
 
-  // Initialize votes from localStorage
+  // Load votes from localStorage
   useEffect(() => {
-    if (!polls || !Array.isArray(polls)) {
-      console.warn('Polls prop is invalid or empty:', polls);
-      return;
-    }
+    if (!Array.isArray(polls) || polls.length === 0) return;
 
-    const initialVotes = {};
+    const loadedVotes = {};
     polls.forEach((poll) => {
-      if (!poll.id || !poll.options || !Array.isArray(poll.options)) {
-        console.warn(`Invalid poll data for poll ${poll.id}:`, poll);
-        return;
-      }
-      const saved = localStorage.getItem(`poll-${poll.id}`);
-      initialVotes[poll.id] = saved
+      const saved = localStorage.getItem(`demo-poll-votes-${poll.id}`);
+      loadedVotes[poll.id] = saved
         ? JSON.parse(saved)
-        : poll.options.reduce((acc, opt) => {
-            if (!opt.id) {
-              console.warn(`Invalid option in poll ${poll.id}:`, opt);
-              return acc;
-            }
-            return { ...acc, [opt.id]: 0 };
-          }, {});
+        : poll.options.reduce((acc, opt) => ({ ...acc, [opt.id]: 0 }), {});
     });
-    setVotes(initialVotes);
+    setVotes(loadedVotes);
   }, [polls]);
 
   // Save votes to localStorage
   useEffect(() => {
     Object.keys(votes).forEach((pollId) => {
-      localStorage.setItem(`poll-${pollId}`, JSON.stringify(votes[pollId]));
+      localStorage.setItem(
+        `demo-poll-votes-${pollId}`,
+        JSON.stringify(votes[pollId])
+      );
     });
   }, [votes]);
 
   const handleVote = (pollId, optionId) => {
-    console.log(`Attempting vote: pollId=${pollId}, optionId=${optionId}`);
-    const poll = polls.find((p) => p.id === pollId);
-    if (!poll) {
-      console.warn(`Poll not found: ${pollId}`);
-      return;
-    }
-
-    const pollVotes =
-      votes[pollId] ||
-      poll.options.reduce((acc, opt) => ({ ...acc, [opt.id]: 0 }), {});
-    const hasVoted = Object.values(pollVotes).some((count) => count > 0);
-    if (hasVoted) {
-      console.log(`User has already voted for poll ${pollId}`);
-      return;
-    }
-
     setVotes((prev) => ({
       ...prev,
       [pollId]: {
-        ...pollVotes,
-        [optionId]: (pollVotes[optionId] || 0) + 1,
+        ...(prev[pollId] || {}),
+        [optionId]: (prev[pollId]?.[optionId] || 0) + 1,
       },
     }));
 
-    console.log(`Vote recorded: pollId=${pollId}, optionId=${optionId}`);
+    // Show popup for this poll
     setShowThanks(pollId);
-    setTimeout(() => setShowThanks(null), 2000);
+    setTimeout(() => setShowThanks(null), 1800);
   };
 
   return (
     <div className="poll-card">
-      <h3 className="poll-title">Fan Polls</h3>
+      <h3 className="poll-title">Fan Polls (Demo Mode)</h3>
       <div className="polls-list">
-        {!polls || polls.length === 0 ? (
+        {polls.length === 0 ? (
           <p style={{ color: '#aaa', textAlign: 'center' }}>
             No polls available
           </p>
         ) : (
           polls.map((poll) => {
-            if (!poll.id || !poll.options) {
-              console.warn(`Skipping invalid poll:`, poll);
-              return null;
-            }
             const pollVotes = votes[poll.id] || {};
             const totalVotes = Object.values(pollVotes).reduce(
               (a, b) => a + b,
               0
             );
-            const safeTotal = totalVotes > 0 ? totalVotes : 1; // Prevent NaN
-            const userVotedOption = Object.keys(pollVotes).find(
-              (id) => pollVotes[id] > 0
-            );
+            const safeTotal = totalVotes > 0 ? totalVotes : 1;
 
             return (
               <div key={poll.id} className="poll-item">
-                <h4 className="poll-question">
-                  {poll.question || 'Untitled Poll'}
-                </h4>
+                <h4 className="poll-question">{poll.question}</h4>
                 <div className="poll-options">
                   {poll.options.map((opt) => {
-                    if (!opt.id || !opt.text) {
-                      console.warn(
-                        `Skipping invalid option in poll ${poll.id}:`,
-                        opt
-                      );
-                      return null;
-                    }
                     const percentage = Math.round(
                       ((pollVotes[opt.id] || 0) / safeTotal) * 100
                     );
-                    const isUserVote = userVotedOption === opt.id;
 
                     return (
                       <div
                         key={opt.id}
-                        className={`poll-option ${isUserVote ? 'voted' : ''}`}
+                        className="poll-option clickable"
+                        onClick={() => handleVote(poll.id, opt.id)}
                       >
-                        <div className="poll-label">
-                          <span>{opt.text}</span>
-                          <span className="poll-pct">{percentage}%</span>
+                        {/* Text + % above bar */}
+                        <div className="poll-label-above">
+                          <span className="option-text">{opt.text}</span>
+                          <span className="poll-pct-above">{percentage}%</span>
                         </div>
+
+                        {/* Progress bar */}
                         <div className="poll-bar-bg">
                           <div
                             className="poll-bar"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
-                        {!isUserVote && (
-                          <button
-                            className="poll-vote-btn"
-                            onClick={() => handleVote(poll.id, opt.id)}
-                          >
-                            Vote
-                          </button>
-                        )}
-                        {isUserVote && (
-                          <span className="your-vote">Your vote</span>
-                        )}
+
+                        {/* Click hint */}
+                        <span className="vote-hint">Click to vote</span>
                       </div>
                     );
                   })}
                 </div>
+
+                {/* Total votes */}
                 <div className="poll-total">
                   {totalVotes} vote{totalVotes !== 1 ? 's' : ''}
                 </div>
 
-                {/* Thank You Popup */}
+                {/* THANK YOU POPUP – RESTORED */}
                 {showThanks === poll.id && (
-                  <div className="thank-you-popup">
-                    Thank you for your vote!
-                  </div>
+                  <div className="thank-you-popup">Thanks for you vote!</div>
                 )}
               </div>
             );
@@ -162,3 +115,143 @@ const PollCard = ({ polls = [] }) => {
 };
 
 export default PollCard;
+
+// The code below is more ideal for production - allows just one vote per poll
+// import React, { useState, useEffect } from 'react';
+
+// const PollCard = ({ polls = [] }) => {
+//   const [votes, setVotes] = useState({}); // { pollId: { optionId: count } }
+//   const [votedPolls, setVotedPolls] = useState(new Set()); // Tracks if THIS user voted
+//   const [showThanks, setShowThanks] = useState(null);
+
+//   // Load vote counts from localStorage
+//   useEffect(() => {
+//     if (!Array.isArray(polls) || polls.length === 0) return;
+
+//     const loadedVotes = {};
+//     const alreadyVoted = new Set();
+
+//     polls.forEach((poll) => {
+//       const savedVotes = localStorage.getItem(`poll-votes-${poll.id}`);
+//       const savedUserVote = localStorage.getItem(`user-voted-${poll.id}`);
+
+//       loadedVotes[poll.id] = savedVotes
+//         ? JSON.parse(savedVotes)
+//         : poll.options.reduce((acc, opt) => ({ ...acc, [opt.id]: 0 }), {});
+
+//       if (savedUserVote) alreadyVoted.add(poll.id);
+//     });
+
+//     setVotes(loadedVotes);
+//     setVotedPolls(alreadyVoted);
+//   }, [polls]);
+
+//   // Save vote counts to localStorage
+//   useEffect(() => {
+//     Object.keys(votes).forEach((pollId) => {
+//       localStorage.setItem(
+//         `poll-votes-${pollId}`,
+//         JSON.stringify(votes[pollId])
+//       );
+//     });
+//   }, [votes]);
+
+//   const handleVote = (pollId, optionId) => {
+//     if (votedPolls.has(pollId)) {
+//       console.log(`Already voted on poll ${pollId}`);
+//       return;
+//     }
+
+//     setVotes((prev) => ({
+//       ...prev,
+//       [pollId]: {
+//         ...(prev[pollId] || {}),
+//         [optionId]: (prev[pollId]?.[optionId] || 0) + 1,
+//       },
+//     }));
+
+//     setVotedPolls((prev) => new Set(prev).add(pollId));
+//     localStorage.setItem(`user-voted-${pollId}`, 'true');
+
+//     setShowThanks(pollId);
+//     setTimeout(() => setShowThanks(null), 2000);
+//   };
+
+//   return (
+//     <div className="poll-card">
+//       <h3 className="poll-title">Fan Polls</h3>
+//       <div className="polls-list">
+//         {polls.length === 0 ? (
+//           <p style={{ color: '#aaa', textAlign: 'center' }}>
+//             No polls available
+//           </p>
+//         ) : (
+//           polls.map((poll) => {
+//             const pollVotes = votes[poll.id] || {};
+//             const totalVotes = Object.values(pollVotes).reduce(
+//               (a, b) => a + b,
+//               0
+//             );
+//             const safeTotal = totalVotes > 0 ? totalVotes : 1;
+//             const userVotedOption = Object.keys(pollVotes).find(
+//               (id) => pollVotes[id] > 0 && votedPolls.has(poll.id)
+//             );
+//             const hasUserVoted = votedPolls.has(poll.id);
+
+//             return (
+//               <div key={poll.id} className="poll-item">
+//                 <h4 className="poll-question">{poll.question}</h4>
+//                 <div className="poll-options">
+//                   {poll.options.map((opt) => {
+//                     const percentage = Math.round(
+//                       ((pollVotes[opt.id] || 0) / safeTotal) * 100
+//                     );
+//                     const isUserVote = userVotedOption === opt.id;
+
+//                     return (
+//                       <div
+//                         key={opt.id}
+//                         className={`poll-option ${isUserVote ? 'voted' : ''} ${
+//                           !hasUserVoted ? 'clickable' : ''
+//                         }`}
+//                         onClick={() =>
+//                           !hasUserVoted && handleVote(poll.id, opt.id)
+//                         }
+//                       >
+//                         <div className="poll-label">
+//                           <span>{opt.text}</span>
+//                           <span className="poll-pct">{percentage}%</span>
+//                           {!hasUserVoted && (
+//                             <span className="vote-text">Click to vote</span>
+//                           )}
+//                         </div>
+//                         <div className="poll-bar-bg">
+//                           <div
+//                             className="poll-bar"
+//                             style={{ width: `${percentage}%` }}
+//                           />
+//                         </div>
+//                         {isUserVote && (
+//                           <span className="your-vote">Your vote</span>
+//                         )}
+//                       </div>
+//                     );
+//                   })}
+//                 </div>
+//                 <div className="poll-total">
+//                   {totalVotes} vote{totalVotes !== 1 ? 's' : ''}
+//                 </div>
+
+//                 {showThanks === poll.id && (
+//                   <div className="thank-you-popup">Thank you for voting!</div>
+//                 )}
+//               </div>
+//             );
+//           })
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PollCard;

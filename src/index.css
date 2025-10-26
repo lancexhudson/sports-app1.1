@@ -419,12 +419,6 @@ body,
 }
 
 /* === POLL CARD === */
-.poll-card {
-  background: #1e1e1e;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
 
 .poll-title {
   font-size: 18px;
@@ -479,26 +473,6 @@ body,
   font-size: 14px;
   color: #e0e0e0;
   margin-bottom: 4px;
-}
-
-.poll-pct {
-  font-weight: 600;
-  color: #ff6b35;
-}
-
-.poll-bar-bg {
-  height: 6px;
-  background: #333;
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.poll-bar {
-  height: 100%;
-  background: #ff6b35;
-  border-radius: 3px;
-  transition: width 0.4s ease;
 }
 
 .poll-vote-btn {
@@ -567,6 +541,11 @@ body,
     opacity: 0;
     transform: translate(-50%, -40%);
   }
+}
+
+.poll-item {
+  position: relative;
+  margin-bottom: 24px;
 }
 
 /* === STANDINGS PAGE === */
@@ -669,4 +648,140 @@ body,
   padding: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
+}
+
+/* === POLL OPTION – CLICKABLE (DEMO MODE) === */
+.poll-option.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  padding: 10px;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.poll-option.clickable:hover {
+  background: #2a2a2a;
+  border-color: #ff6b35;
+}
+
+.poll-option.clickable:hover .vote-text {
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.vote-text {
+  font-size: 11px;
+  color: #aaa;
+  font-style: italic;
+  margin-left: auto;
+}
+
+/* Progress bar */
+/* .poll-bar {
+  height: 100%;
+  background: #ff6b35;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+} */
+
+/* === POLL BAR + CENTERED PERCENTAGE === */
+.poll-bar-bg {
+  position: relative;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+/* .poll-bar {
+  height: 100%;
+  background: #ff6b35;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  position: relative;
+} */
+
+/* Center percentage INSIDE the bar */
+/* .poll-pct {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 1;
+  white-space: nowrap;
+} */
+
+/* Optional: Dim percentage when bar is empty */
+.poll-bar-bg:empty ~ .poll-pct,
+.poll-bar-bg .poll-bar[style*='width: 0%'] ~ .poll-pct {
+  color: #aaa;
+}
+
+/* === POLL OPTION – PERCENTAGE ABOVE BAR === */
+.poll-option.clickable {
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  background: #1e1e1e;
+  margin-bottom: 8px;
+}
+
+.poll-option.clickable:hover {
+  background: #2a2a2a;
+  border-color: #ff6b35;
+}
+
+/* Text + % above bar */
+.poll-label-above {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.option-text {
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.poll-pct-above {
+  color: #ff6b35;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Progress bar */
+/* .poll-bar-bg {
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+} */
+
+.poll-bar {
+  height: 100%;
+  background: #ff6b35;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Vote hint */
+.vote-hint {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
 }
