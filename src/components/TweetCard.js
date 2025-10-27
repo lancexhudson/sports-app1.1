@@ -1,8 +1,17 @@
 // src/components/TweetCard.js
-export default function TweetCard({ text, author, likes = 0, retweets = 0 }) {
+export default function TweetCard({
+  text,
+  author,
+  likes = 0,
+  retweets = 0,
+  verified = false,
+}) {
   return (
     <div className="card tweet-card">
-      <div className="tweet-author">@{author}</div>
+      <div className="tweet-author">
+        @{author}
+        {verified && <span className="verified-badge">✓</span>}
+      </div>
       <div className="tweet-text">{text}</div>
       <div style={{ fontSize: '12px', color: '#aaa', marginTop: '8px' }}>
         <span>❤️ {likes}</span>

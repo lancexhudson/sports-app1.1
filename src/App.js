@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SportPage from './pages/SportPage';
 import ScoresPage from './pages/ScoresPage';
@@ -27,7 +27,7 @@ export default function App() {
             <Route path="/:sportId/:tab" element={<SportPage />} />
           </Routes>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </Router>
   );

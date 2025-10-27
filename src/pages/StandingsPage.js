@@ -276,7 +276,11 @@ export default function StandingsPage() {
   }, []);
 
   return (
-    <div className="container" style={{ padding: '100px 20px 40px' }}>
+    <div
+      className="container"
+      // style={{ padding: '100px 20px 40px' }}
+      style={{ padding: '75px 20px 40px', minHeight: 'calc(100vh - 180px)' }}
+    >
       <h1
         style={{ fontSize: '32px', textAlign: 'center', marginBottom: '32px' }}
       >

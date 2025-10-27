@@ -123,9 +123,12 @@ export default function ScoresPage() {
       : finalScores.filter((s) => s.sport === filter);
 
   return (
-    <div className="container" style={{ paddingTop: '100px' }}>
-      <h1 className="page-title">Final Scores</h1>
-
+    <div
+      className="container"
+      style={{ padding: '50px 20px 40px', minHeight: 'calc(100vh - 180px)' }}
+    >
+      {/* // style={{ paddingTop: '100px' }} */}
+      <h1 className="page-title">Scores</h1>
       {/* Sport Filter */}
       <div className="filter-bar">
         <label
@@ -147,7 +150,6 @@ export default function ScoresPage() {
           ))}
         </select>
       </div>
-
       {loading ? (
         <p className="loading">Loading final scores…</p>
       ) : error ? (

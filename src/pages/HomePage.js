@@ -33,15 +33,15 @@ const POLLS = [
       { id: 'c', text: 'Jokić & Murray' },
     ],
   },
-  //   {
-  //     id: '3',
-  //     question: 'Next Super Bowl champ?',
-  //     options: [
-  //       { id: 'a', text: 'Chiefs' },
-  //       { id: 'b', text: '49ers' },
-  //       { id: 'c', text: 'Bengals' },
-  //     ],
-  //   },
+  {
+    id: '3',
+    question: 'Next Super Bowl champ?',
+    options: [
+      { id: 'a', text: 'Chiefs' },
+      { id: 'b', text: '49ers' },
+      { id: 'c', text: 'Bengals' },
+    ],
+  },
 ];
 
 export default function HomePage() {
@@ -56,7 +56,7 @@ export default function HomePage() {
       setError(null);
 
       try {
-        // === TOP STORIES – 6 total (2×3 grid) ===
+        // === TOP STORIES – 12 total (2×6 grid) ===
         const storyPromises = SPORTS.map(async (sport) => {
           try {
             const { data } = await axios.get(
@@ -77,7 +77,7 @@ export default function HomePage() {
         });
 
         const storyResults = await Promise.all(storyPromises);
-        setTopStories(storyResults.flat().slice(0, 8));
+        setTopStories(storyResults.flat().slice(0, 12));
 
         // === UPCOMING GAMES – 4 total with kickoff times ===
         const gamePromises = SPORTS.map(async (sport) => {
@@ -180,7 +180,7 @@ export default function HomePage() {
       >
         OVERTIME — Home
       </h1> */}
-      <h1 className="page-title">Home - Featured</h1>
+      <h1 className="page-title">Home</h1>
 
       {loading ? (
         <p style={{ textAlign: 'center', color: '#aaa' }}>Loading...</p>

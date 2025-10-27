@@ -69,7 +69,11 @@ export default function ScoresPage() {
     filter === 'all' ? scores : scores.filter((s) => s.sport === filter);
 
   return (
-    <div className="container" style={{ paddingTop: '100px' }}>
+    <div
+      className="container"
+      // style={{ paddingTop: '100px' }}
+      style={{ padding: '50px 20px 40px', minHeight: 'calc(100vh - 180px)' }}
+    >
       <h1 className="page-title">Scores</h1>
 
       {/* Sport filter */}
