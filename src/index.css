@@ -913,3 +913,128 @@ body,
   border-radius: 3px;
   margin-left: 4px;
 }
+
+/* === MOBILE HEADER MENU === */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ff6b35;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: #1e1e1e;
+  padding: 16px 0;
+  border-top: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-link {
+  padding: 12px 20px;
+  font-size: 16px;
+  color: #e0e0e0;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-link:hover,
+.mobile-link.active {
+  color: #ff6b35;
+  background: #2a2a2a;
+}
+
+/* === RESPONSIVE: MOBILE (<= 768px) === */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: flex;
+  }
+
+  /* Optional: Adjust header padding */
+  .app-header {
+    padding: 10px 0;
+  }
+
+  .header-container {
+    padding: 0 12px;
+  }
+
+  .header-logo span {
+    font-size: 20px;
+  }
+
+  .header-icon {
+    font-size: 20px;
+  }
+}
+
+/* Hide mobile nav when closed */
+.mobile-nav[style*='display: none'] {
+  display: none !important;
+}
+
+/* === NEWS GRID – MOBILE STACKED, DESKTOP 2-COL === */
+.stories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 769px) {
+  .stories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* === NEWS GRID – MOBILE: STACKED, DESKTOP: 2-COL === */
+.stories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 769px) {
+  .stories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* === NEWS EXPAND BUTTON (MOBILE) === */
+.news-expand-container {
+  text-align: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #333;
+}
+
+.news-expand-btn {
+  background: transparent;
+  color: #ff6b35;
+  border: 1px solid #ff6b35;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.news-expand-btn:hover {
+  background: #ff6b35;
+  color: white;
+}

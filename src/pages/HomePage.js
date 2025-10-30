@@ -49,6 +49,22 @@ export default function HomePage() {
   const [upcomingGames, setUpcomingGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedNews, setExpandedNews] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // Update isMobile on resize + auto-expand on desktop
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) setExpandedNews(true); // Always show all on desktop
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const storiesToShow = isMobile && !expandedNews ? 4 : 12;
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -170,16 +186,6 @@ export default function HomePage() {
       className="container"
       style={{ padding: '50px 20px 40px', minHeight: 'calc(100vh - 180px)' }}
     >
-      {/* <h1
-        style={{
-          fontSize: '32px',
-          textAlign: 'center',
-          marginBottom: '32px',
-          color: '#ff6b35',
-        }}
-      >
-        OVERTIME — Home
-      </h1> */}
       <h1 className="page-title">Home</h1>
 
       {loading ? (
@@ -188,7 +194,7 @@ export default function HomePage() {
         <p style={{ textAlign: 'center', color: '#ff6b35' }}>{error}</p>
       ) : (
         <div className="home-grid">
-          {/* LEFT: 2×3 Top Stories */}
+          {/* LEFT: Top Stories */}
           <section className="home-stories">
             <h2
               style={{
@@ -200,10 +206,22 @@ export default function HomePage() {
               Top Stories
             </h2>
             <div className="stories-grid">
-              {topStories.map((story, i) => (
+              {topStories.slice(0, storiesToShow).map((story, i) => (
                 <NewsCard key={i} {...story} />
               ))}
             </div>
+
+            {/* View All Button – Mobile Only */}
+            {isMobile && topStories.length > 4 && !expandedNews && (
+              <div className="news-expand-container">
+                <button
+                  onClick={() => setExpandedNews(true)}
+                  className="news-expand-btn"
+                >
+                  View all stories
+                </button>
+              </div>
+            )}
           </section>
 
           {/* RIGHT: Upcoming Games + Unified Poll Card */}
