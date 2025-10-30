@@ -1,5 +1,5 @@
 // src/pages/HomePage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import NewsCard from '../components/NewsCard';
 import ScoreCard from '../components/ScoreCard';
@@ -52,6 +52,9 @@ export default function HomePage() {
   const [expandedNews, setExpandedNews] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+  // Ref to Top Stories section for smooth scroll on "Show less"
+  const topStoriesRef = useRef(null);
+
   // Update isMobile on resize + auto-expand on desktop
   useEffect(() => {
     const handleResize = () => {
@@ -65,6 +68,25 @@ export default function HomePage() {
   }, []);
 
   const storiesToShow = isMobile && !expandedNews ? 4 : 12;
+
+  // Handle button click: expand/collapse + scroll only on "Show less"
+  const handleToggleNews = () => {
+    const willExpand = !expandedNews;
+
+    if (willExpand) {
+      // EXPAND: Just update state, no scroll
+      setExpandedNews(true);
+    } else {
+      // COLLAPSE: Update state + scroll back to Top Stories
+      setExpandedNews(false);
+      setTimeout(() => {
+        topStoriesRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100); // Wait for collapse animation
+    }
+  };
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -195,7 +217,7 @@ export default function HomePage() {
       ) : (
         <div className="home-grid">
           {/* LEFT: Top Stories */}
-          <section className="home-stories">
+          <section className="home-stories" ref={topStoriesRef}>
             <h2
               style={{
                 fontSize: '24px',
@@ -214,10 +236,7 @@ export default function HomePage() {
             {/* Expand / Collapse Button – Mobile Only */}
             {isMobile && topStories.length > 4 && (
               <div className="news-expand-container">
-                <button
-                  onClick={() => setExpandedNews(!expandedNews)}
-                  className="news-expand-btn"
-                >
+                <button onClick={handleToggleNews} className="news-expand-btn">
                   {expandedNews ? 'Show less' : 'View all stories'}
                 </button>
               </div>
