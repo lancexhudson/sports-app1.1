@@ -211,14 +211,14 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* View All Button – Mobile Only */}
-            {isMobile && topStories.length > 4 && !expandedNews && (
+            {/* Expand / Collapse Button – Mobile Only */}
+            {isMobile && topStories.length > 4 && (
               <div className="news-expand-container">
                 <button
-                  onClick={() => setExpandedNews(true)}
+                  onClick={() => setExpandedNews(!expandedNews)}
                   className="news-expand-btn"
                 >
-                  View all stories
+                  {expandedNews ? 'Show less' : 'View all stories'}
                 </button>
               </div>
             )}
