@@ -1,13 +1,10 @@
 // src/components/Header.js
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
-  const location = useLocation();
-  const isHome = location.pathname === '/';
-
   return (
     <header className="app-header">
       <div className="header-container">
