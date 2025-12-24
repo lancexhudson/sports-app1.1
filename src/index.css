@@ -54,6 +54,7 @@ body,
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap; /* Prevent wrap */
 }
 
 .header-logo {
@@ -74,7 +75,7 @@ body,
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 .header-link {
