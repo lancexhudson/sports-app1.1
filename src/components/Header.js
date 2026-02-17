@@ -123,7 +123,7 @@ export default function Header() {
             Polls
           </NavLink>
           <a
-            href="/Overtime-PRD.md"
+            href="/public/OVERTIME-PRD.md"
             className="mobile-link"
             target="_blank"
             rel="noopener noreferrer"
