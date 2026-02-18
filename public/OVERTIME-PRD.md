@@ -2,13 +2,13 @@ Overtime Sports App – Product Requirements Document (PRD)Author: Lance Hudson
 Date: November 2025
 Version: 1.0
 
-1. Executive Summary - Overtime is a modern, fan-centric sports app inspired by the fan-first digital experiences. It delivers real-time scores, top news, social buzz, league standings, and interactive fan polls in a clean, dark-mode interface optimized for mobile and desktop.Built as a personal passion project using React, Axios, and ESPN's public API, Overtime demonstrates my ability to conceive, design, and deliver a consumer-facing product from idea to deployment. It reflects my deep interest in sports media and my goal to transition into Product Management at a company like FOX Sports, where I can help shape the future of fan engagement.
+1. Executive Summary - Overtime is a modern, fan-centric sports app inspired by the fan-first digital experiences. It delivers real-time scores, top news, social buzz, league standings, and interactive fan polls in a clean, dark-mode interface optimized for mobile and desktop.Built as a personal passion project using React, Axios, and ESPN's public API, Overtime demonstrates my ability to conceive, design, and deliver a consumer-facing product from idea to deployment. It reflects my deep interest in sports media and my goal to transition into Product Management at a company like ESPN, FOX Sports, and Barstool where I can help shape the future of fan engagement.
 
 2. Business Case & Opportunity
 
 Problem: Sports fans want a single, fast, beautiful place to stay updated — but many apps feel cluttered, slow, or ad-heavy. Mobile users especially need quick access to scores and news without digging through menus.
 
-Opportunity: With over 150 million sports fans in the U.S. alone, there's strong demand for intuitive digital experiences. FOX Sports has led the way with innovative apps, but there's always room to push boundaries in personalization, real-time data, and community interaction.
+Opportunity: With over 150 million sports fans in the U.S. alone, there's strong demand for intuitive digital experiences. Sports media organizations like Barstool, Fox Sports, and ESPN have led the way with innovative apps, but there's always room to push boundaries in personalization, real-time data, and community interaction.
 
 Value Proposition: Overtime provides a minimalist, high-performance sports hub that prioritizes speed, readability, and fun — perfect for casual fans and die-hards alike.
 
